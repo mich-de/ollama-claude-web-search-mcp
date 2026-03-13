@@ -84,6 +84,32 @@ Once inside Claude, ask:
 
 Claude will call the `web_search` tool, fetch results via DuckDuckGo, and provide an updated answer using your local model.
 
+## ⚡ Quick Access & Aliases
+
+To avoid typing long commands every time, you can set up a permanent alias in your terminal.
+
+### 1. PowerShell Alias (Recommended)
+Add a custom function to your PowerShell Profile so you can simply type `claude-local` from any terminal:
+
+1. Open your profile in Notepad:
+   ```powershell
+   notepad $PROFILE
+   ```
+2. Paste the following function at the end of the file:
+   ```powershell
+   function claude-local {
+       $env:ANTHROPIC_BASE_URL="http://localhost:11434/v1"
+       $env:ANTHROPIC_API_KEY="sk-ant-ollama-local"
+       claude --model qwen3.5-4b-unsloth --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
+   }
+   ```
+3. Restart your terminal and just type: `claude-local`
+
+### 2. Windows Batch Script (`.bat`)
+A `claude-start.bat` file is included in this repository. You can move it to your desktop and double-click it to launch the entire environment instantly.
+
+---
+
 ## 🧪 Verification & Examples
 
 Once Claude Code is running, try these queries to verify everything is working as expected:
