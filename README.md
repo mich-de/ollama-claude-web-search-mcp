@@ -84,6 +84,26 @@ Once inside Claude, ask:
 
 Claude will call the `web_search` tool, fetch results via DuckDuckGo, and provide an updated answer using your local model.
 
+## 🧪 Verification & Examples
+
+Once Claude Code is running, try these queries to verify everything is working as expected:
+
+### 1. Test Local Inference Speed
+Ask something that doesn't require the web to see how fast the **i9-12900** and **T1000** are:
+> "Write a Python script to scrape a website using BeautifulSoup and explain the logic briefly."
+
+### 2. Test Real-Time Web Search (MCP)
+Ask about something that happened today or very recently to trigger the `web_search` tool:
+> "What are the top AI news stories from the last 24 hours? Use your web search tool to find the latest updates."
+
+### 3. Technical Analysis + Web
+Combine local coding knowledge with web documentation:
+> "Check the current version of the 'FastAPI' library on PyPI and show me a basic example of how to implement an OIDC authentication flow with it."
+
+### 4. Hardware Check
+Verify if the model is aware of its environment:
+> "Analyze my current hardware configuration (i9-12900, 24 threads, T1000 GPU) and suggest the best settings for running a 7B model if I upgrade my RAM to 128GB."
+
 ---
 
 ## 🛡️ License
