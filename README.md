@@ -11,19 +11,29 @@ This repository provides a step-by-step guide to setting up **Claude Code** (Ant
 
 ---
 
-## 🛠️ Installation
+## 🛠️ Installation & Hardware Optimization
 
-### 1. Ollama & Unsloth Model
-First, ensure Ollama is installed. Then, download the optimized Qwen 3.5 4B model from Unsloth:
+### 1. Download the Unsloth Optimized Model
+This setup uses the **Unsloth Qwen 3.5 4B (Dynamic 2.0 GGUF)**, which is specifically chosen for a balance between speed (fitting in 4GB VRAM) and intelligence.
+
+1. Download the GGUF file from Hugging Face:
+   ```powershell
+   curl.exe -L -o Qwen3.5-4B-UD-Q4_K_XL.gguf https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/main/Qwen3.5-4B-UD-Q4_K_XL.gguf
+   ```
+
+### 2. Configure for your Hardware
+To get the most out of your **Intel i9-12900** and **NVIDIA T1000**, create a `Modelfile` (provided as `Modelfile.example`) with these critical parameters:
+
+- `num_thread 24`: Symmetrically utilizes all 24 threads of the i9-12900.
+- `num_ctx 4096`: Balanced context window to fit within 4GB VRAM alongside the model.
+- `num_gpu 99`: Instructs Ollama to offload as many layers as possible to the GPU.
+
+Create the local model:
 ```bash
-# Pull the base model
-ollama pull qwen3.5:4b
-
-# Create an optimized version using the provided Modelfile
-ollama create qwen3.5-4b-fast -f Modelfile.example
+ollama create qwen3.5-4b-unsloth -f Modelfile.example
 ```
 
-### 2. Python Environment & MCP
+### 3. Python Environment & MCP
 Set up a virtual environment and install the required libraries:
 ```bash
 python -m venv .venv
@@ -31,24 +41,23 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 3. MCP Search Server
-The repository includes `mcp_server_search.py`, which uses `curl.exe` to perform robust web searches via DuckDuckGo without requiring an API key.
+### 4. MCP Search Server
+The repository includes `mcp_server_search.py`, which uses `curl.exe` for robust web searches via DuckDuckGo without requiring an API key.
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Configuration (Claude Code)
 
-### Claude Desktop/CLI Config
-Claude Code looks for MCP servers in a specific configuration file. On Windows, create or edit:
+Claude Code looks for MCP servers in:
 `%APPDATA%\Claude\claude_desktop_config.json`
 
-Add the following:
+Add the following (update the paths to your local directory):
 ```json
 {
     "mcpServers": {
         "web_search": {
-            "command": "C:\\Path\\To\\Your\\.venv\\Scripts\\python.exe",
-            "args": ["C:\\Path\\To\\Your\\mcp_server_search.py"]
+            "command": "C:\\Users\\<USER>\\.ollama\\.open-webui-venv\\Scripts\\python.exe",
+            "args": ["C:\\Users\\<USER>\\.ollama\\ollama-claude-web-search-mcp\\mcp_server_search.py"]
         }
     }
 }
