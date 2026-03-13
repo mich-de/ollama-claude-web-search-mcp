@@ -38,16 +38,20 @@ This setup uses the **Unsloth Qwen 3.5 4B (Dynamic 2.0 GGUF)**, which is specifi
    curl.exe -L -o Qwen3.5-4B-UD-Q4_K_XL.gguf https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/main/Qwen3.5-4B-UD-Q4_K_XL.gguf
    ```
 
-### 2. Configure for your Hardware
-To get the most out of your **Intel i9-12900** and **NVIDIA T1000**, create a `Modelfile` (provided as `Modelfile.example`) with these critical parameters:
+### 2. Configure for Hardware & Tool Support
+Claude Code requires specific model naming and metadata to support tools (like web search). We recommend creating a model named `qwen3.5` by injecting the Unsloth GGUF into the official template:
 
-- `num_thread 24`: Symmetrically utilizes all 24 threads of the i9-12900.
-- `num_ctx 4096`: Balanced context window to fit within 4GB VRAM alongside the model.
-- `num_gpu 99`: Instructs Ollama to offload as many layers as possible to the GPU.
+```powershell
+# 1. Pull the official model to get the correct template
+ollama pull qwen3.5:4b
 
-Create the local model:
-```bash
-ollama create qwen3.5-4b-unsloth -f Modelfile.example
+# 2. Export official Modelfile
+ollama show qwen3.5:4b --modelfile | Out-File -FilePath Modelfile.official -Encoding utf8
+
+# 3. Create perfectly compatible model (Automated via install.ps1 or manual edit)
+# Ensure the 'FROM' line points to your Unsloth .gguf file
+# Set 'PARAMETER num_thread 24' for i9-12900
+ollama create qwen3.5 -f Modelfile.final
 ```
 
 ### 3. Python Environment & MCP
@@ -80,8 +84,6 @@ Add the following (update the paths to your local directory):
 }
 ```
 
----
-
 ## 🏃 Usage (Official Ollama Integration)
 
 To launch Claude Code with Ollama, set the official environment variables:
@@ -90,13 +92,31 @@ To launch Claude Code with Ollama, set the official environment variables:
 # Set official Ollama-Claude integration variables
 $env:ANTHROPIC_BASE_URL="http://localhost:11434"
 $env:ANTHROPIC_AUTH_TOKEN="ollama"
+# IMPORTANT: Unset any existing API Key to avoid conflict
 Remove-Item Env:\ANTHROPIC_API_KEY -ErrorAction SilentlyContinue
 
-# Launch Claude Code with your optimized model
-claude --model qwen3.5-4b-unsloth --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
+# Launch Claude Code
+claude --model qwen3.5 --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
 ```
 
-> **Note**: For agentic features to work best, a large context window is recommended. While we set 4096 for 4GB VRAM, you can try increasing it in the `Modelfile` if your system RAM (64GB) allows it.
+---
+
+## 🛠️ Troubleshooting & Reset
+
+### 1. Auth Conflict Error
+If you see `Both a token (ANTHROPIC_AUTH_TOKEN) and an API key (ANTHROPIC_API_KEY) are set`, you MUST remove the `ANTHROPIC_API_KEY` variable.
+
+### 2. Model "does not support tools"
+Claude Code checks the model name. Ensure your model is named exactly `qwen3.5` and was created using the official `TEMPLATE` (see step 2 above).
+
+### 3. Drive/Path Issues (e.g. searching in D:\)
+If Claude Code looks for resources in the wrong drive, perform a reset:
+```powershell
+# Logout and clear local cache/plugins
+claude /logout
+Remove-Item -Path "$HOME\AppData\Roaming\Claude\cache" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "$HOME\AppData\Roaming\Claude\plugins" -Recurse -Force -ErrorAction SilentlyContinue
+```
 
 ## ⚡ Quick Access & Aliases
 
@@ -108,7 +128,7 @@ function claude-local {
     $env:ANTHROPIC_BASE_URL="http://localhost:11434"
     $env:ANTHROPIC_AUTH_TOKEN="ollama"
     if (Test-Path Env:\ANTHROPIC_API_KEY) { Remove-Item Env:\ANTHROPIC_API_KEY }
-    claude --model qwen3.5-4b-unsloth --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
+    claude --model qwen3.5 --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
 }
 ```
 

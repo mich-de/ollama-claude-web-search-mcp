@@ -13,24 +13,27 @@ if (!(Get-Command python -ErrorAction SilentlyContinue)) { throw "Python not fou
 
 # 2. Download Unsloth Qwen 3.5 4B Model
 $modelFile = "Qwen3.5-4B-UD-Q4_K_XL.gguf"
+$fullModelPath = Join-Path (Get-Location) $modelFile
 if (!(Test-Path $modelFile)) {
     Write-Host "[*] Downloading Unsloth Qwen 3.5 4B GGUF (3.4GB)..." -ForegroundColor Yellow
     curl.exe -L -o $modelFile https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/main/Qwen3.5-4B-UD-Q4_K_XL.gguf
-} else {
-    Write-Host "[+] Model file already exists. Skipping download." -ForegroundColor Green
 }
 
-# 3. Create Ollama Model
-Write-Host "[*] Creating Ollama model 'qwen3.5-4b-unsloth'..." -ForegroundColor Yellow
-$modelfileContent = @"
-FROM ./$modelFile
-PARAMETER num_thread 24
-PARAMETER num_ctx 4096
-PARAMETER temperature 0.7
-SYSTEM "You are a professional AI Assistant with real-time web search capabilities."
-"@
-$modelfileContent | Out-File -FilePath Modelfile -Encoding utf8
-ollama create qwen3.5-4b-unsloth -f Modelfile
+# 3. Create Perfectly Compatible Ollama Model
+Write-Host "[*] Creating Ollama model 'qwen3.5' with tool support..." -ForegroundColor Yellow
+# Pull official model first to get the correct template/metadata
+ollama pull qwen3.5:4b
+# Export official Modelfile
+ollama show qwen3.5:4b --modelfile | Out-File -FilePath Modelfile.official -Encoding utf8
+# Inject Unsloth GGUF
+$base = Get-Content Modelfile.official
+$filtered = $base | Where-Object { $_ -notmatch "^FROM" }
+$header = "FROM $fullModelPath"
+$threads = "PARAMETER num_thread 24"
+$final = @($header) + $filtered + @($threads)
+$final | Out-File -FilePath Modelfile.final -Encoding utf8
+# Create the actual model
+ollama create qwen3.5 -f Modelfile.final
 
 # 4. Install Claude Code
 Write-Host "[*] Installing Claude Code globally..." -ForegroundColor Yellow
@@ -56,7 +59,6 @@ $config = @{
         }
     }
 } | ConvertTo-Json -Depth 10
-
 $config | Out-File -FilePath (Join-Path $claudeConfigDir "claude_desktop_config.json") -Encoding utf8
 
 # 7. Add PowerShell Alias
@@ -67,11 +69,15 @@ function claude-local {
     `$env:ANTHROPIC_BASE_URL="http://localhost:11434"
     `$env:ANTHROPIC_AUTH_TOKEN="ollama"
     if (Test-Path Env:\ANTHROPIC_API_KEY) { Remove-Item Env:\ANTHROPIC_API_KEY }
-    claude --model qwen3.5-4b-unsloth --mcp-config "$claudeConfigDir\claude_desktop_config.json"
+    claude --model qwen3.5 --mcp-config "$claudeConfigDir\claude_desktop_config.json"
 }
 "@
 if (!(Test-Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
-Add-Content -Path $PROFILE -Value $aliasFunction
+# Check if function already exists to avoid duplication
+$profileContent = Get-Content $PROFILE -Raw
+if ($profileContent -notmatch "function claude-local") {
+    Add-Content -Path $PROFILE -Value $aliasFunction
+}
 
 Write-Host "✅ Installation Complete!" -ForegroundColor Green
 Write-Host "👉 Restart your terminal and type 'claude-local' to start." -ForegroundColor Cyan
