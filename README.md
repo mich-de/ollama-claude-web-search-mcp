@@ -71,26 +71,35 @@ Add the following (update the paths to your local directory):
 
 ---
 
-## 🏃 Usage
+## 🏃 Usage (Official Ollama Integration)
 
-Launch Claude Code by pointing it to your local Ollama endpoint and loading the MCP configuration:
+To launch Claude Code with Ollama, set the official environment variables:
 
 ```powershell
-# Set local Ollama endpoint (OpenAI compatible)
-$env:ANTHROPIC_BASE_URL="http://localhost:11434/v1"
-$env:ANTHROPIC_API_KEY="sk-ant-ollama-local"
+# Set official Ollama-Claude integration variables
+$env:ANTHROPIC_BASE_URL="http://localhost:11434"
+$env:ANTHROPIC_AUTH_TOKEN="ollama"
+$env:ANTHROPIC_API_KEY=""
 
-# Launch Claude Code
-claude --model qwen3.5-4b-fast --mcp-config %APPDATA%\Claude\claude_desktop_config.json
+# Launch Claude Code with your optimized model
+claude --model qwen3.5-4b-unsloth --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
 ```
 
-### Testing the Search
-Once inside Claude, ask:
-> "Search for the latest news on AI models released this week."
+> **Note**: For agentic features to work best, a large context window is recommended. While we set 4096 for 4GB VRAM, you can try increasing it in the `Modelfile` if your system RAM (64GB) allows it.
 
-Claude will call the `web_search` tool, fetch results via DuckDuckGo, and provide an updated answer using your local model.
+## ⚡ Quick Access & Aliases
 
-## 🧠 Qwen 3.5 Model Selection Matrix
+### 1. PowerShell Alias (Official Standards)
+Update your PowerShell Profile (`notepad $PROFILE`):
+
+```powershell
+function claude-local {
+    $env:ANTHROPIC_BASE_URL="http://localhost:11434"
+    $env:ANTHROPIC_AUTH_TOKEN="ollama"
+    $env:ANTHROPIC_API_KEY=""
+    claude --model qwen3.5-4b-unsloth --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
+}
+```
 
 The Qwen 3.5 family (Unsloth Optimized) offers a model for every hardware tier. Use this matrix to find your best fit:
 
