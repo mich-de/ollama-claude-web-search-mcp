@@ -24,11 +24,12 @@ If you are on Windows, you can install everything (Model, Claude Code, MCP, Pyth
 
 ## 🛠️ Manual Installation & Hardware Optimization
 
-### 0. Install Claude Code (Official CLI)
-Claude Code is the official Anthropic CLI agent. Install it globally using npm:
-```bash
-npm install -g @anthropic-ai/claude-code
+### 0. Install Claude Code (Official Standalone)
+Claude Code is the official Anthropic CLI agent. The best way to install it on Windows is via PowerShell:
+```powershell
+irm https://claude.ai/install.ps1 | iex
 ```
+*(Alternatively, if you prefer npm: `npm install -g @anthropic-ai/claude-code`)*
 
 ### 1. Download the Unsloth Optimized Model
 This setup uses the **Unsloth Qwen 3.5 4B (Dynamic 2.0 GGUF)**, which is specifically chosen for a balance between speed (fitting in 4GB VRAM) and intelligence.

@@ -35,9 +35,9 @@ $final | Out-File -FilePath Modelfile.final -Encoding utf8
 # Create the actual model
 ollama create qwen3.5 -f Modelfile.final
 
-# 4. Install Claude Code
-Write-Host "[*] Installing Claude Code globally..." -ForegroundColor Yellow
-npm install -g @anthropic-ai/claude-code
+# 4. Install Claude Code (Official Standalone)
+Write-Host "[*] Installing Claude Code via official installer..." -ForegroundColor Yellow
+powershell.exe -Command "irm https://claude.ai/install.ps1 | iex"
 
 # 5. Setup Python Virtual Environment
 Write-Host "[*] Setting up Python venv..." -ForegroundColor Yellow
