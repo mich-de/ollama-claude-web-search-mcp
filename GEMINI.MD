@@ -1,4 +1,5 @@
 # Antigravity Local AI Setup - Memory Log
+**Repository**: [https://github.com/mich-de/ollama-claude-web-search-mcp](https://github.com/mich-de/ollama-claude-web-search-mcp)
 
 ## 📅 Session Date: 2026-03-13
 **Hardware Context:**
