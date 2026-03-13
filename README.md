@@ -84,22 +84,22 @@ Once inside Claude, ask:
 
 Claude will call the `web_search` tool, fetch results via DuckDuckGo, and provide an updated answer using your local model.
 
-## 🧠 Model Selection & Download Guide
+## 🧠 Qwen 3.5 Model Selection Matrix
 
-Choosing the right model is a balance between **Intelligence** (Parameters) and **Speed** (VRAM/RAM).
+The Qwen 3.5 family (Unsloth Optimized) offers a model for every hardware tier. Use this matrix to find your best fit:
 
-### 1. Hardware Selection Matrix
-| VRAM | RAM | Recommended Model Size | Performance |
+| Model Tier | VRAM (4-bit) | Recommended Hardware | Performance Profile |
 | :--- | :--- | :--- | :--- |
-| **4GB** | 16GB+ | **1B - 4B** (e.g. Qwen 3.5 4B) | **Instant** (Real-time) |
-| **8GB** | 16GB+ | **7B - 9B** (e.g. Llama 3.1 8B) | **Fast** |
-| **12GB** | 32GB+ | **11B - 14B** (e.g. Mistral NeMo) | **Moderate** |
-| **24GB** | 64GB+ | **30B - 70B** (e.g. DeepSeek R1) | **Slow** (Strategic Thinking) |
+| **0.8B / 1.5B** | ~1.5 GB | Low-end / Mobile | **Extreme Speed** (>150 t/s) |
+| **4B (Your Fit)**| ~3.5 GB | **NVIDIA T1000 / RTX 3050** | **Instant** (Real-time) |
+| **9B** | ~6.5 GB | RTX 3060 / 4060 (8GB) | **Fast** |
+| **27B / 35B-A3B**| ~18 - 22 GB | RTX 3090 / 4090 (24GB) | **Moderate** (Smart MoE) |
+| **122B / 397B** | 70GB - 210GB| Multi-GPU / Mac Studio | **Strategic** (Giant) |
 
-*Note: Since you have **64GB of System RAM**, you can run large models (30B+) by offloading them to the CPU, even with a 4GB GPU. It will be slower but much smarter.*
+*Note: With your **64GB of RAM**, you can run the **27B** or **35B-A3B** models by offloading them to the CPU. They will be slower but significantly smarter for complex reasoning tasks.*
 
-### 2. How to Download Any Unsloth Model
-Unsloth provides optimized **Dynamic GGUF** models on Hugging Face. To install any of them:
+### 2. How to Download Any Unsloth Qwen 3.5 Model
+Unsloth provides optimized **Dynamic 2.0 GGUF** versions of Qwen 3.5. To install:
 
 1. Visit [huggingface.co/unsloth](https://huggingface.co/unsloth) and find a GGUF repository.
 2. Copy the download link for the `Q4_K_M` or `UD-Q4_K_XL` version.
