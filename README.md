@@ -162,6 +162,19 @@ Add a custom function to your PowerShell Profile so you can simply type `claude-
    ```
 3. Restart your terminal and just type: `claude-local`
 
+### 💡 Example Usage of `claude-local`
+
+Once you are inside the `claude-local` session, you can use it like this:
+
+- **General Coding**: 
+  `> Create a React component for a responsive navigation bar.`
+- **Using Web Search**: 
+  `> What is the current stock price of NVIDIA? Use your web search tool.`
+- **Technical Research**: 
+  `> Search for the latest best practices for securing a FastAPI application in 2026.`
+- **File Analysis**:
+  `> Read the content of 'main.py' and suggest optimizations for better memory usage.`
+
 ### 2. Windows Batch Script (`.bat`)
 A `claude-start.bat` file is included in this repository. You can move it to your desktop and double-click it to launch the entire environment instantly.
 
