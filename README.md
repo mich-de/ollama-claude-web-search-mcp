@@ -96,7 +96,26 @@ The Qwen 3.5 family (Unsloth Optimized) offers a model for every hardware tier. 
 | **27B / 35B-A3B**| ~18 - 22 GB | RTX 3090 / 4090 (24GB) | **Moderate** (Smart MoE) |
 | **122B / 397B** | 70GB - 210GB| Multi-GPU / Mac Studio | **Strategic** (Giant) |
 
-*Note: With your **64GB of RAM**, you can run the **27B** or **35B-A3B** models by offloading them to the CPU. They will be slower but significantly smarter for complex reasoning tasks.*
+---
+
+## 🏗️ The "Value King" Build: Intel Arc A770 16GB
+The **Intel Arc A770 16GB** is a hidden gem for local LLMs due to its large VRAM at a budget price. Here is how to build a balanced system around it:
+
+### 1. Arc A770 Selection Matrix (Qwen 3.5)
+| Model Size | VRAM Usage (4-bit) | Performance Profile |
+| :--- | :--- | :--- |
+| **9B** | ~6.5 GB | **Extremely Fast** (Full VRAM) |
+| **14B** | ~9.5 GB | **The Sweet Spot** (Full VRAM) |
+| **27B / 35B-A3B**| ~18 - 22 GB | **Balanced** (Hybrid VRAM/RAM) |
+| **70B** | ~40 GB | **Slow** (Strategic Thinking) |
+
+### 2. Recommended Companion Hardware
+To avoid bottlenecks and enable "Hybrid Reasoning" (GPU + CPU), pair the Arc A770 16GB with:
+- **CPU**: **Intel i7-14700K** or **i9-12900K** (20+ Threads). A strong CPU is vital for handling web search, RAG indexing, and offloading larger models.
+- **System RAM**: **64GB DDR5 (5600MT/s+)**. While 16GB of VRAM is great, 64GB of system RAM allows you to run **DeepSeek R1** or **Qwen 3.5 70B** by sharing the load between the Arc A770 and your RAM.
+- **Storage**: **NVMe Gen4 SSD**. Essential for loading 20GB+ models into memory in seconds rather than minutes.
+
+*Note: Since you have **64GB of RAM**, you can run the **27B** or **35B-A3B** models by offloading them to the CPU. They will be slower but significantly smarter for complex reasoning tasks.*
 
 ### 2. How to Download Any Unsloth Qwen 3.5 Model
 Unsloth provides optimized **Dynamic 2.0 GGUF** versions of Qwen 3.5. To install:
