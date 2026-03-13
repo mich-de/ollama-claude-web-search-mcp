@@ -84,6 +84,44 @@ Once inside Claude, ask:
 
 Claude will call the `web_search` tool, fetch results via DuckDuckGo, and provide an updated answer using your local model.
 
+## 🧠 Model Selection & Download Guide
+
+Choosing the right model is a balance between **Intelligence** (Parameters) and **Speed** (VRAM/RAM).
+
+### 1. Hardware Selection Matrix
+| VRAM | RAM | Recommended Model Size | Performance |
+| :--- | :--- | :--- | :--- |
+| **4GB** | 16GB+ | **1B - 4B** (e.g. Qwen 3.5 4B) | **Instant** (Real-time) |
+| **8GB** | 16GB+ | **7B - 9B** (e.g. Llama 3.1 8B) | **Fast** |
+| **12GB** | 32GB+ | **11B - 14B** (e.g. Mistral NeMo) | **Moderate** |
+| **24GB** | 64GB+ | **30B - 70B** (e.g. DeepSeek R1) | **Slow** (Strategic Thinking) |
+
+*Note: Since you have **64GB of System RAM**, you can run large models (30B+) by offloading them to the CPU, even with a 4GB GPU. It will be slower but much smarter.*
+
+### 2. How to Download Any Unsloth Model
+Unsloth provides optimized **Dynamic GGUF** models on Hugging Face. To install any of them:
+
+1. Visit [huggingface.co/unsloth](https://huggingface.co/unsloth) and find a GGUF repository.
+2. Copy the download link for the `Q4_K_M` or `UD-Q4_K_XL` version.
+3. Use `curl.exe` to download:
+   ```powershell
+   curl.exe -L -o my-model.gguf https://huggingface.co/unsloth/REPO_NAME/resolve/main/MODEL_NAME.gguf
+   ```
+4. Create a `Modelfile` pointing to the file:
+   ```dockerfile
+   FROM ./my-model.gguf
+   PARAMETER num_thread 24  # Set to your CPU thread count
+   ```
+5. Create the model in Ollama:
+   ```bash
+   ollama create my-custom-model -f Modelfile
+   ```
+
+### 3. Why Unsloth "Dynamic" GGUFs?
+Standard quantization often loses accuracy in small models. Unsloth **Dynamic 2.0** (UD) quants keep critical layers at higher precision (16-bit) while compressing the rest to 4-bit. This gives you the intelligence of a larger model with the footprint of a smaller one.
+
+---
+
 ## ⚡ Quick Access & Aliases
 
 To avoid typing long commands every time, you can set up a permanent alias in your terminal.
