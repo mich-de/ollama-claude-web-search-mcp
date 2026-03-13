@@ -66,7 +66,7 @@ $aliasFunction = @"
 function claude-local {
     `$env:ANTHROPIC_BASE_URL="http://localhost:11434"
     `$env:ANTHROPIC_AUTH_TOKEN="ollama"
-    `$env:ANTHROPIC_API_KEY=""
+    if (Test-Path Env:\ANTHROPIC_API_KEY) { Remove-Item Env:\ANTHROPIC_API_KEY }
     claude --model qwen3.5-4b-unsloth --mcp-config "$claudeConfigDir\claude_desktop_config.json"
 }
 "@

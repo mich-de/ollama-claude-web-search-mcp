@@ -90,7 +90,7 @@ To launch Claude Code with Ollama, set the official environment variables:
 # Set official Ollama-Claude integration variables
 $env:ANTHROPIC_BASE_URL="http://localhost:11434"
 $env:ANTHROPIC_AUTH_TOKEN="ollama"
-$env:ANTHROPIC_API_KEY=""
+Remove-Item Env:\ANTHROPIC_API_KEY -ErrorAction SilentlyContinue
 
 # Launch Claude Code with your optimized model
 claude --model qwen3.5-4b-unsloth --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
@@ -107,7 +107,7 @@ Update your PowerShell Profile (`notepad $PROFILE`):
 function claude-local {
     $env:ANTHROPIC_BASE_URL="http://localhost:11434"
     $env:ANTHROPIC_AUTH_TOKEN="ollama"
-    $env:ANTHROPIC_API_KEY=""
+    if (Test-Path Env:\ANTHROPIC_API_KEY) { Remove-Item Env:\ANTHROPIC_API_KEY }
     claude --model qwen3.5-4b-unsloth --mcp-config "$HOME\AppData\Roaming\Claude\claude_desktop_config.json"
 }
 ```
