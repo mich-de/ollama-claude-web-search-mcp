@@ -1,0 +1,4 @@
+mcp
+beautifulsoup4
+duckduckgo-search
+requests

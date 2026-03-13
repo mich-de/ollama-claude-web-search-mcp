@@ -1,0 +1,7 @@
+FROM qwen3.5:4b
+PARAMETER num_thread 24
+PARAMETER num_ctx 4096
+# PARAMETER num_gpu 99 (auto)
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+SYSTEM "You are a professional AI Assistant, optimized for local execution with Unsloth's Qwen 3.5 4B model. You have access to real-time web search."
