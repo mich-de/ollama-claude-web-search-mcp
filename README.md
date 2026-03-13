@@ -9,9 +9,20 @@ This repository provides a step-by-step guide to setting up **Claude Code** (Ant
 - **Web Search**: DuckDuckGo (Free, via MCP + Curl)
 - **Hardware Optimized**: Tested on i9-12900 + 64GB RAM + NVIDIA T1000
 
+## 🚀 Quick Start (Automated Install)
+
+If you are on Windows, you can install everything (Model, Claude Code, MCP, Python Venv, and Aliases) with a single command:
+
+1. Clone this repo and enter the directory.
+2. Run the installer:
+   ```powershell
+   .\install.ps1
+   ```
+3. Restart your terminal and type: `claude-local`
+
 ---
 
-## 🛠️ Installation & Hardware Optimization
+## 🛠️ Manual Installation & Hardware Optimization
 
 ### 0. Install Claude Code (Official CLI)
 Claude Code is the official Anthropic CLI agent. Install it globally using npm:
